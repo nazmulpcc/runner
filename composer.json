@@ -1,0 +1,21 @@
+{
+    "name": "nazmulpcc/compiler",
+    "description": "A PHP package that can compile and execute codes in various languages",
+    "type": "library",
+    "require": {
+        "monolog/monolog": "^1.24"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Nazmul Alam",
+            "email": "nazmulpcc@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "nazmulpcc\\": "src/"
+        }
+    }
+}

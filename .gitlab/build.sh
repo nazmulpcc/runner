@@ -7,10 +7,6 @@ set -xe
 
 # Install git (the php image doesn't have it) which is required by composer
 apt-get update -yqq
-apt install software-properties-common
-add-apt-repository -y ppa:ondrej/php
-apt update -yqq
-apt install php7.1-cli
 apt-get install git openjdk-8-jdk gcc g++ composer -yqq
 
 # Install phpunit, the tool that we will use for testing

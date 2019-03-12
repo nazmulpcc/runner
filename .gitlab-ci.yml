@@ -1,4 +1,4 @@
-image: ubuntu:16.04
+image: php:7.1
 cache:
   paths:
   - vendor/

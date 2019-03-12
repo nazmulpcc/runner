@@ -8,7 +8,7 @@ set -xe
 # Install git (the php image doesn't have it) which is required by composer
 apt-get update -yqq
 # apt-get install openjdk-8-jdk gcc g++
-apt-get install git zip unzip -y
+apt-get install git zip unzip zlib1g-dev -y
 
 #install composer
 php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
@@ -20,6 +20,6 @@ php -r "unlink('composer-setup.php');"
 curl --location --output /usr/local/bin/phpunit https://phar.phpunit.de/phpunit-7.phar
 chmod +x /usr/local/bin/phpunit
 
-docker-php-ext-install php-zip
+docker-php-ext-install zip
 composer install
 

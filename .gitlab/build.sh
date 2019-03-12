@@ -7,6 +7,8 @@ set -xe
 
 # Install git (the php image doesn't have it) which is required by composer
 apt-get update -yqq
+apt-get install apt-utils -y
+apt-get install openjdk-8-jdk -y
 apt-get install git zip unzip zlib1g-dev -y
 
 #install composer
@@ -21,5 +23,3 @@ chmod +x /usr/local/bin/phpunit
 
 docker-php-ext-install zip
 composer install
-
-apt-get install openjdk-8-jdk -y

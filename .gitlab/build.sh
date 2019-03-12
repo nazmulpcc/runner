@@ -5,11 +5,13 @@
 
 set -xe
 
+export DEBIAN_FRONTEND=noninteractive
+
 # Install git (the php image doesn't have it) which is required by composer
 apt-get update -yqq
-apt-get install apt-utils -y
-apt-get install openjdk-8-jdk -y
-apt-get install git zip unzip zlib1g-dev -y
+apt-get install apt-utils -yqq
+apt-get install openjdk-8-jdk -yqq
+apt-get install git zip unzip zlib1g-dev -yqq
 
 #install composer
 php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"

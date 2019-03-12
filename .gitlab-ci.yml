@@ -1,0 +1,9 @@
+cache:
+  paths:
+  - vendor/
+before_script:
+- bash .gitlab/build.sh > /dev/null
+
+test:app:
+  script:
+    - phpunit tests/*

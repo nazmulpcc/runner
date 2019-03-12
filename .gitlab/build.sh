@@ -7,7 +7,7 @@ set -xe
 
 # Install git (the php image doesn't have it) which is required by composer
 apt-get update -yqq
-apt-get install openjdk-8-jdk gcc g++
+# apt-get install openjdk-8-jdk gcc g++
 
 #install composer
 php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"

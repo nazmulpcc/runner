@@ -2,6 +2,10 @@
 
 namespace nazmulpcc\Traits;
 
+use nazmulpcc\Checkers\Verdict;
+use nazmulpcc\Checkers\Standard;
+
+
 /**
  * Isolator Trait
  */
@@ -38,6 +42,44 @@ trait Isolator
         $this->registerEvent('afterRun', 'processMetaFile');
         $this->registerEvent('afterRun', 'cleanUpBox');
         $this->registerEvent('destroying', 'cleanUpBox');
+    }
+
+    public function judge(Standard $checker)
+    {
+        $tmpMeta = false;
+        if(!$this->metaFile){
+            $tmpMeta = true;
+            $this->meta('/tmp/meta-'. rand(9999, 99999999));
+        }
+        $this->run();
+        if($tmpMeta){
+            unlink($this->metaFile);
+        }
+        if(($verdict = $this->processVerdictFromMeta()) != Verdict::ACCEPTED){
+            return $verdict;
+        }
+        return $checker->output($this->outputFilePath)->check();
+    }
+
+    public function processVerdictFromMeta()
+    {
+        $status = $this->getMeta('status', 'OK');
+        if($status == 'OK') return Verdict::ACCEPTED;
+        if($status == 'TO') return Verdict::TIME_LIMIT_EXCEEDED;
+        if($status == 'RE') return Verdict::RUNTIME_ERROR;
+        if($status == 'XX') return Verdict::INTERNAL_ERROR;
+        if($status == 'SG') return $this->processRunTimeSignal();
+        return Verdict::INTERNAL_ERROR;
+    }
+
+    public function processRunTimeSignal()
+    {
+        $code = $this->getMeta('exitsig', null);
+        if($code == 11) return Verdict::RUNTIME_ERROR_SIGSEGV;
+        if($code == 25) return Verdict::RUNTIME_ERROR_SIGXFSZ;
+        if($code == 8) return Verdict::RUNTIME_ERROR_SIGFPE;
+        if($code == 6) return Verdict::RUNTIME_ERROR_SIGABRT;
+        return Verdict::RUNTIME_ERROR;
     }
 
     /**
@@ -128,7 +170,7 @@ trait Isolator
                 $metas[$key] = $val;
             }
         }
-        return $metas;
+        return $this->metas = $metas;
     }
     /**
      * Get a meta value by a key
@@ -136,14 +178,14 @@ trait Isolator
      * @param string $key
      * @return mixed
      */
-    public function getMeta($key = false)
+    public function getMeta($key = false, $default = null)
     {
         if(!$key){
             return $this->metas;
         }elseif(isset($this->metas[$key])){
             return $this->metas[$key];
         }else{
-            return null;
+            return $default;
         }
     }
     /**

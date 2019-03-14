@@ -1,5 +1,5 @@
 {
-    "name": "nazmulpcc/compiler",
+    "name": "codetowin/compiler",
     "description": "A PHP package that can compile and execute codes in various languages",
     "type": "library",
     "require": {

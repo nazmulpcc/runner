@@ -20,16 +20,26 @@ class JavaCompiler extends BaseCompiler
 
 	public function getCompileCommand()
 	{
-		return "{$this->getVersionedCompiler()} {$this->codePath} 2>&1";
+		return "{$this->getVersionedCompiler('compiler')} {$this->codePath} 2>&1";
 	}
 
 	public function getRunCommand()
 	{
-		return $this->isolate("-p --run /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java Main");
+		return $this->isolate("-p --run {$this->getVersionedCompiler('runner')} Main");
+	}
+
+	public static function getCompilerVersions()
+	{
+		return [
+			'java8' => [
+				'compiler' => '/usr/lib/jvm/java-8-openjdk-amd64/bin/javac',
+				'runner'   => '/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java'
+			]
+		];
 	}
 
 	protected function getDefaultCompiler()
 	{
-		return '/usr/lib/jvm/java-8-openjdk-amd64/bin/javac';
+		return 'java8';
 	}	
 }

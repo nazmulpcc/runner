@@ -122,7 +122,7 @@ trait Isolator
 
     public function buildIsolateCommand()
     {
-        $cmd = $this->isolate;
+        $cmd = "{$this->isolate} -E HOME={$this->boxPath}";
         !$this->memoryLimit ? : $cmd .= " -m {$this->memoryLimit}";
         !$this->timeLimit   ? : $cmd .= " -t {$this->timeLimit} -w {$this->getWallTime()}";
         !$this->fileSize    ? : $cmd .= " -f {$this->fileSize}";

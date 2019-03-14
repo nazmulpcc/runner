@@ -16,14 +16,18 @@ trait HasVersions {
 		return $this;
 	}
 
-	public function getVersionedCompiler()
+	/**
+	 * @param  string Should the path be either compiler's or runner's
+	 * @return void
+	 */
+	public function getVersionedCompiler($type = 'compiler')
 	{
-		$compilers = static::getCompilers();
-		if (isset($compilers[$this->version])) {
-			return $compilers[$this->version];
-		}else{
-			return $this->getDefaultCompiler();
+		if($type != 'compiler' && $type != 'runner'){
+			$type = 'compiler';
 		}
+		$compilers = static::getCompilers();
+		$version = isset($compilers[$this->version]) ? $this->version : $this->getDefaultCompiler();
+		return is_string($compilers[$version]) ? $compilers[$version] : $compilers[$version][$type];
 	}
 
 	/**
@@ -32,13 +36,13 @@ trait HasVersions {
 	 */
 	public static function getCompilers()
 	{
-		return array_merge(static::getCompilerVersions(), static::$compilers);
+		return static::getCompilerVersions() + static::$compilers;
 	}
 
 	/**
 	 * Override when using this trait
 	 */
-	protected static function getCompilerVersions()
+	public static function getCompilerVersions()
 	{
 		return [];
 	}
@@ -48,21 +52,21 @@ trait HasVersions {
 	 * @param string $version The version
 	 * @param string $path    The path/command
 	 */
-	public static function setCompiler(string $version, string $path)
+	public static function setCompiler(string $version, string $compiler, string $runner)
 	{
 		if(!in_array($version, static::getCompilers())){
-			static::$compilers[$version] = $path;
+			static::$compilers[$version] = compact('compiler', 'runner');
 		}
 	}
 
 	/**
 	 * Set compilers
-	 * @param array $compilers A map of version=>path for compilers
+	 * @param array $compilers A map of version=>[compiler, runner] for compilers
 	 */
 	public static function setCompilers(array $compilers)
 	{
 		foreach ($compilers as $version => $path) {
-			static::setCompiler($version, $path);
+			static::setCompiler($version, $path['compiler'], $path['runner']);
 		}
 	}
 }

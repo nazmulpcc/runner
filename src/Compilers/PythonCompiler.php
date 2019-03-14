@@ -8,7 +8,7 @@ use nazmulpcc\Traits\HasVersions;
 /**
  * PHP compiler class
  */
-class PhpCompiler extends BaseCompiler
+class PythonCompiler extends BaseCompiler
 {
 	protected $autoClean = true;
 
@@ -20,9 +20,14 @@ class PhpCompiler extends BaseCompiler
 		parent::__construct($code, $object);
 	}
 
+	public function compile()
+	{
+		return true;
+	}
+
 	public function getCompileCommand()
 	{
-		return "{$this->getVersionedCompiler('compiler')} -l {$this->codePath}";
+		return null;
 	}
 
 	public function getRunCommand()
@@ -32,7 +37,7 @@ class PhpCompiler extends BaseCompiler
 
 	public function getDefaultCompiler()
 	{
-		return '7.2';
+		return '3.5';
 	}
 
 	/**
@@ -42,9 +47,8 @@ class PhpCompiler extends BaseCompiler
 	protected static function getCompilerVersions()
 	{
 		return [
-			'5.6' => '/usr/bin/php',
-			'7.0' => '/usr/bin/php',
-			'7.2' => '/usr/bin/php7.2'
+			'2.7' => '/usr/bin/python2.7',
+			'3.5' => '/usr/bin/python3.5'
 		];
 	}
 

@@ -15,7 +15,7 @@ class CCompiler extends BaseCompiler
 
 	public function getCompileCommand()
 	{
-		return "/usr/bin/gcc -O2 -pipe -std=c{$this->getVersionedCompiler()} -lm {$this->codePath} -o {$this->objectPath} 2>&1";
+		return "/usr/bin/gcc -O2 -pipe -std=c{$this->getVersionedCompiler('compiler')} -lm {$this->codePath} -o {$this->objectPath} 2>&1";
 	}
 
 	public function getRunCommand()
@@ -35,9 +35,9 @@ class CCompiler extends BaseCompiler
 	protected static function getCompilerVersions()
 	{
 		return [
-			'11' => '11',
-			'14' => '14',
-			'17' => '17'
+			'11' => ['compiler' => '11'],
+			'14' => ['compiler' => '14'],
+			'17' => ['compiler' => '17']
 		];
 	}
 }

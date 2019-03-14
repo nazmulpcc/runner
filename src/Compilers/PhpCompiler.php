@@ -21,7 +21,7 @@ class PhpCompiler extends BaseCompiler
 
 	public function getRunCommand()
 	{
-		return $this->isolate("/usr/bin/php /box/". basename($this->objectPath));
+		return $this->isolate("--run /usr/bin/php /box/". basename($this->objectPath));
 	}
 
 	public function getDefaultCompiler()

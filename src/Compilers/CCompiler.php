@@ -3,14 +3,13 @@
 namespace nazmulpcc\Compilers;
 
 use nazmulpcc\Traits\HasVersions;
-use nazmulpcc\Traits\Isolator;
 
 /**
  * C compiler class
  */
 class CCompiler extends BaseCompiler
 {
-	use HasVersions, Isolator;
+	use HasVersions;
 
 	protected $autoClean = true;
 
@@ -21,7 +20,7 @@ class CCompiler extends BaseCompiler
 
 	public function getRunCommand()
 	{
-		return $this->isolate('/box/'. basename($this->objectPath));
+		return $this->isolate('--run /box/'. basename($this->objectPath));
 	}
 
 	public function getDefaultCompiler()

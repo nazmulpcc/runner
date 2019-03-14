@@ -4,6 +4,11 @@ namespace nazmulpcc\Checkers;
 
 abstract class BaseChecker
 {
+    public function __construct($args)
+    {
+        isset($args['source']) ? $this->sourceFile = $args['source'] : '';
+        isset($args['output']) ? $this->outputFile = $args['output'] : '';
+    }
     /**
      * The main answer file
      *

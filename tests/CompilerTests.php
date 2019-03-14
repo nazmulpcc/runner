@@ -6,6 +6,8 @@ use nazmulpcc\Compilers\CCompiler;
 use nazmulpcc\Compilers\CppCompiler;
 use nazmulpcc\Compilers\JavaCompiler;
 use nazmulpcc\Compilers\PhpCompiler;
+use nazmulpcc\Checkers\Verdict;
+use nazmulpcc\Checkers\Standard as Checker;
 
 /**
  * Test The compilers
@@ -14,22 +16,24 @@ class CompilerTests extends TestCase
 {
 	public function test_c_compiler()
 	{
-		$code = __DIR__. '/../codes/code.c';
+		$code = $this->codePath('code.c');
 		$compiler = new CCompiler($code);
 		$this->assertInstanceOf('nazmulpcc\Compilers\CCompiler', $compiler);
 		$this->assertTrue($compiler->compile());
 		$this->assertEquals($compiler->getOutput(), "");
+		$this->assertEquals($this->standardChecker($compiler), Verdict::ACCEPTED);
 		$compiler->cleanUp();
 	}
 
 	public function test_cpp_compiler()
 	{
-		$code = __DIR__. '/../codes/code.cpp';
+		$code = $this->codePath('code.cpp');
 		$compiler = new CppCompiler($code);
 		$compiler->setVersion(17);
 		$this->assertInstanceOf('nazmulpcc\Compilers\CppCompiler', $compiler);
 		$this->assertTrue($compiler->compile());
 		$this->assertEquals($compiler->getOutput(), "");
+		$this->assertEquals($this->standardChecker($compiler), Verdict::ACCEPTED);
 		$compiler->cleanUp();
 	}
 
@@ -40,16 +44,39 @@ class CompilerTests extends TestCase
 		$this->assertInstanceOf('nazmulpcc\Compilers\JavaCompiler', $compiler);
 		$this->assertTrue($compiler->compile());
 		$this->assertEquals($compiler->getOutput(), "");
+		$this->assertEquals($this->standardChecker($compiler), Verdict::ACCEPTED);
 		$compiler->cleanUp();
 	}
 
-	// public function test_php_compiler()
-	// {
-	// 	$code = __DIR__. '/../codes/code.php';
-	// 	$compiler = new PhpCompiler($code, $code);
-	// 	$this->assertInstanceOf('nazmulpcc\Compilers\PhpCompiler', $compiler);
-	// 	$this->assertTrue($compiler->compile());
-	// 	$this->assertContains("No syntax errors detected", $compiler->getOutput());
-	//  $compiler->cleanUp();
-	// }
+	public function test_php_compiler()
+	{
+		$code = __DIR__. '/../codes/code.php';
+		$compiler = new PhpCompiler($code, $code);
+		$this->assertInstanceOf('nazmulpcc\Compilers\PhpCompiler', $compiler);
+		$this->assertTrue($compiler->compile());
+		$this->assertContains("No syntax errors detected", $compiler->getOutput()); // TODO: check exit code, not message
+		// $this->assertEquals($this->standardChecker($compiler), Verdict::ACCEPTED);
+		$compiler->cleanUp();
+	}
+
+	/**
+	 * Get a standard Checker
+	 *
+	 * @return Checker
+	 */
+	public function getChecker()
+	{
+		return new Checker(['source' => __DIR__. '/../codes/output']);
+	}
+
+	public function codePath($path = null)
+	{
+		return __DIR__. '/../codes/'. trim($path, ' /');
+	}
+
+	public function standardChecker($compiler)
+	{
+		$checker = $this->getChecker();
+		return $compiler->output($this->codePath('tmp'))->judge($checker);
+	}
 }

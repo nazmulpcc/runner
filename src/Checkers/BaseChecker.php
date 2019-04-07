@@ -2,6 +2,8 @@
 
 namespace nazmulpcc\Checkers;
 
+use Exception;
+
 abstract class BaseChecker
 {
     public function __construct($args)

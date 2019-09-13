@@ -24,6 +24,12 @@ abstract class BaseChecker
      */
     protected $outputFile = false;
     /**
+     * The participants output file
+     *
+     * @var array
+     */
+    protected $diffOutput = [];
+    /**
      * The log file
      *
      * @var string
@@ -116,8 +122,17 @@ abstract class BaseChecker
 
     public function diff($source, $output)
     {
-        exec("diff -q {$source} {$output}", $out, $exit);
+        $this->diffOutput = [];
+        exec("diff {$source} {$output}", $this->diffOutput, $exit);
         return $exit ? false : true;
+    }
+
+    public function getDiffOutPut()
+    {
+        if(is_array($this->diffOutput)){
+            return implode("\n", $this->diffOutput);
+        }
+        return $this->diffOutput;
     }
     /**
      * Remove all whitespace from $source and write the file to $destination

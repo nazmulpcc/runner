@@ -338,7 +338,7 @@ abstract class BaseCompiler
 
 	public function cleanUp()
 	{
-		@unlink($this->outputFilePath);
+		// @unlink($this->outputFilePath);
 		@unlink($this->objectPath);
 		return;
 	}
